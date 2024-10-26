@@ -14,9 +14,6 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         ./modules/rust
-        ./modules/go
-        ./modules/python
-        ./modules/common
       ];
 
       systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
