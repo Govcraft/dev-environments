@@ -1,11 +1,13 @@
 # modules/rust/default.nix
-{ config, lib, pkgs, ... }:
+{ withSystem }:
+{ config, lib, ... }:
 {
   imports = [
     ./base.nix
     ./ide.nix
   ];
-
-  # This file can include any shared configurations or expose combined options
-  # that are common across Rust development environments
+  
+  flake = {
+    # Export any flake-level configurations here if needed
+  };
 }

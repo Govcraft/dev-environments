@@ -9,13 +9,11 @@ in {
       default = "none";
       description = "IDE preference for Rust development";
     };
-
     extensions = lib.mkOption {
       type = lib.types.listOf lib.types.package;
       default = [];
       description = "Additional IDE extensions to include";
     };
-
     settings = lib.mkOption {
       type = lib.types.attrs;
       default = {};
@@ -24,7 +22,7 @@ in {
   };
 
   config = lib.mkIf (cfg.type != "none") {
-    perSystem = { system, pkgs, ... }: {
+    perSystem = { pkgs, system, config, ... }: {
       dev.rust.extraPackages = lib.optionals (cfg.type == "rust-rover") [
         pkgs.jetbrains.rust-rover
       ] ++ lib.optionals (cfg.type == "vscode") [
@@ -32,15 +30,16 @@ in {
         pkgs.rust-analyzer
       ] ++ cfg.extensions;
 
-      # IDE-specific configurations
-      dev.rust.shellHook = lib.mkIf (cfg.type == "vscode") ''
-        if [ ! -d .vscode ]; then
-          mkdir .vscode
-          cat > .vscode/settings.json << EOF
-          ${builtins.toJSON cfg.settings}
-          EOF
-        fi
-      '';
+      devShells.default = pkgs.mkShell {
+        shellHook = lib.mkIf (cfg.type == "vscode") ''
+          if [ ! -d .vscode ]; then
+            mkdir .vscode
+            cat > .vscode/settings.json << EOF
+            ${builtins.toJSON cfg.settings}
+            EOF
+          fi
+        '';
+      };
     };
   };
 }

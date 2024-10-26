@@ -14,14 +14,20 @@
   };
 
   outputs = inputs@{ flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
+    flake-parts.lib.mkFlake { inherit inputs; } ({ flake-parts-lib, withSystem, ... }:
+    let
+      inherit (flake-parts-lib) importApply;
+      flakeModules.rust = importApply ./modules/rust/default.nix { inherit withSystem; };
+    in
+    {
       imports = [
-        ./modules/rust
+        flakeModules.rust
       ];
 
       systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
 
-      flakeModules.rustModule = ./modules/rust; # Add this line
-      exports.rustModule = ./modules/rust;      # And this line
-    };
+      flake = {
+        inherit flakeModules;
+      };
+    });
 }
