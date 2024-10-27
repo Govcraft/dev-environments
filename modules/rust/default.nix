@@ -35,16 +35,30 @@ in
           });
         in
         {
-          options.rust-dev = lib.mkOption {
-            type = mainSubmodule;
-            description = lib.mdDoc ''
-              Specification for the Rust development environment
-            '';
-            default = { };
+          options = {
+            rust-dev = lib.mkOption {
+              type = mainSubmodule;
+              description = lib.mdDoc ''
+                Specification for the Rust development environment
+              '';
+              default = { };
+            };
+
+            # Define the options for packages and hooks
+            env-packages = lib.mkOption {
+              type = lib.types.attrsOf (lib.types.listOf lib.types.package);
+              default = {};
+              description = "Packages for development environments";
+            };
+
+            env-hooks = lib.mkOption {
+              type = lib.types.attrsOf lib.types.str;
+              default = {};
+              description = "Shell hooks for development environments";
+            };
           };
 
           config = lib.mkIf config.rust-dev.enable {
-            # Just expose the packages and hooks needed
             env-packages.rust = [
               pkgs.rustup
               pkgs.cargo

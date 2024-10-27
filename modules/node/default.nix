@@ -40,16 +40,30 @@ in
           });
         in
         {
-          options.node-dev = lib.mkOption {
-            type = mainSubmodule;
-            description = lib.mdDoc ''
-              Specification for the Node.js development environment
-            '';
-            default = { };
+          options = {
+            node-dev = lib.mkOption {
+              type = mainSubmodule;
+              description = lib.mdDoc ''
+                Specification for the Node.js development environment
+              '';
+              default = { };
+            };
+
+            # Define the options for packages and hooks
+            env-packages = lib.mkOption {
+              type = lib.types.attrsOf (lib.types.listOf lib.types.package);
+              default = {};
+              description = "Packages for development environments";
+            };
+
+            env-hooks = lib.mkOption {
+              type = lib.types.attrsOf lib.types.str;
+              default = {};
+              description = "Shell hooks for development environments";
+            };
           };
 
           config = lib.mkIf config.node-dev.enable {
-            # Just expose the packages and hooks needed
             env-packages.node = [
               (pkgs.nodejs_20)
               pkgs.nodePackages.npm
