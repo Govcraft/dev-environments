@@ -10,16 +10,11 @@
     };
   };
 
-  outputs = inputs@{nixpkgs, flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      imports = [
-        ./modules/rust/base.nix
-      ];
+  outputs = inputs@{ nixpkgs, flake-parts, ... }:
+    {
+      flakeModule = ./modules/rust;
+    };
 
-      systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-      flake = {
-        # Explicitly expose modules
-        modules.rust = ./modules/rust;
-      };
-  };
 }
+
+
