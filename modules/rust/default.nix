@@ -4,10 +4,11 @@
 {
   imports = [
     ./base.nix
-    ./ide.nix
+#    ./ide.nix
   ];
   
   flake = {
+    dev.rust
     # Export any flake-level configurations here if needed
   };
 }
