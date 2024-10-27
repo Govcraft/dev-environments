@@ -49,23 +49,22 @@ in
           };
 
           config = lib.mkIf config.node-dev.enable {
-            devShells.node = pkgs.mkShell {
-              buildInputs = [
-                (pkgs.nodejs_20)
-                pkgs.nodePackages.npm
-                pkgs.gnumake
-                pkgs.gcc
-                pkgs.python3
-              ] ++ lib.optionals (config.node-dev.ide.type == "webstorm") [
-                pkgs.jetbrains.webstorm
-              ] ++ (map (tool: pkgs.nodePackages.${tool}) config.node-dev.withTools)
-                ++ config.node-dev.extraPackages;
+            # Just expose the packages and hooks needed
+            env-packages.node = [
+              (pkgs.nodejs_20)
+              pkgs.nodePackages.npm
+              pkgs.gnumake
+              pkgs.gcc
+              pkgs.python3
+            ] ++ lib.optionals (config.node-dev.ide.type == "webstorm") [
+              pkgs.jetbrains.webstorm
+            ] ++ (map (tool: pkgs.nodePackages.${tool}) config.node-dev.withTools)
+              ++ config.node-dev.extraPackages;
 
-              shellHook = ''
-                echo "Node.js $(node --version) development environment"
-                echo "npm $(npm --version)"
-              '';
-            };
+            env-hooks.node = ''
+              echo "Node.js $(node --version) development environment"
+              echo "npm $(npm --version)"
+            '';
           };
         });
   };

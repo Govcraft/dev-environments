@@ -38,31 +38,30 @@ in
           options.rust-dev = lib.mkOption {
             type = mainSubmodule;
             description = lib.mdDoc ''
-              Specification for the scripts in dev shell
+              Specification for the Rust development environment
             '';
             default = { };
           };
 
-          config = {
-            devShells.default = lib.mkIf config.rust-dev.enable (pkgs.mkShell {
-              buildInputs = [
-                pkgs.rustup
-                pkgs.cargo
-                pkgs.llvm
-                pkgs.pkg-config
-              ] ++ lib.optionals (config.rust-dev.ide.type != "none") [
-                pkgs.jetbrains.rust-rover
-                pkgs.rust-analyzer
-              ] ++ (map (tool: pkgs."cargo-${tool}") ([
-                "tarpaulin"
-                "release"
-                "machete"
-              ] ++ config.rust-dev.withTools)) ++ config.rust-dev.extraPackages;
-              
-              shellHook = ''
-                rustup default stable
-              '';
-            });
+          config = lib.mkIf config.rust-dev.enable {
+            # Just expose the packages and hooks needed
+            env-packages.rust = [
+              pkgs.rustup
+              pkgs.cargo
+              pkgs.llvm
+              pkgs.pkg-config
+            ] ++ lib.optionals (config.rust-dev.ide.type != "none") [
+              pkgs.jetbrains.rust-rover
+              pkgs.rust-analyzer
+            ] ++ (map (tool: pkgs."cargo-${tool}") ([
+              "tarpaulin"
+              "release"
+              "machete"
+            ] ++ config.rust-dev.withTools)) ++ config.rust-dev.extraPackages;
+
+            env-hooks.rust = ''
+              rustup default stable
+            '';
           };
         });
   };
