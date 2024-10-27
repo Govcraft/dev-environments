@@ -15,8 +15,8 @@ in
             enable = lib.mkEnableOption "Node.js development environment";
             nodeVersion = lib.mkOption {
               type = lib.types.str;
-              default = "latest";
-              description = "Node.js version to use (e.g., 'latest', '18', '20')";
+              default = "20";
+              description = "Node.js version to use (e.g., '18', '20')";
             };
             withTools = lib.mkOption {
               type = lib.types.listOf lib.types.str;
@@ -49,7 +49,8 @@ in
 
         config = lib.mkIf config.node-dev.enable {
           env-packages.node = [
-            (pkgs.nodejs_20)
+            # Use the specified Node.js version
+            (pkgs."nodejs_${config.node-dev.nodeVersion}")
             pkgs.nodePackages.npm
             pkgs.gnumake
             pkgs.gcc
