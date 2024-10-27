@@ -49,7 +49,6 @@ in
 
         config = lib.mkIf config.node-dev.enable {
           env-packages.node = [
-            # Use the specified Node.js version
             (pkgs."nodejs_${config.node-dev.nodeVersion}")
             pkgs.nodePackages.npm
             pkgs.gnumake

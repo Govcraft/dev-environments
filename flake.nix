@@ -22,7 +22,6 @@
         };
       };
       
-      # Keep the old flakeModule for backwards compatibility
       flakeModule = ./modules/rust;
     };
 }
