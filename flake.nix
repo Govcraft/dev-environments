@@ -10,20 +10,12 @@
     };
   };
 
-  outputs = inputs@{ flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } ({ withSystem, flake-parts-lib, ... }:
-    let
-      inherit (flake-parts-lib) importApply;
-      flakeModules.default = importApply ./modules/rust/default.nix { inherit withSystem; };
-    in
-    {
+  outputs = inputs@{nixpkgs, flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
-        flakeModules.default
-        # inputs.foo.flakeModules.default
+        ./modules/rust/base.nix
       ];
-      systems = [ "x86_64-linux" "aarch64-darwin" ];
-      flake = {
-        inherit flakeModules;
-      };
-    });
+
+      systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    };
 }
