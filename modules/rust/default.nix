@@ -13,7 +13,11 @@ in
         mainSubmodule = types.submodule ({ config, ... }: {
           options = {
             enable = lib.mkEnableOption "Rust development environment";
-            withTools = lib.mkOption {
+ rustVersion = lib.mkOption {
+              type = lib.types.enum [ "stable" "beta" "nightly" ];
+              default = "stable";
+              description = "Rust toolchain version to use (stable, beta, or nightly)";
+            };            withTools = lib.mkOption {
               type = lib.types.listOf lib.types.str;
               default = [  ];
               description = "List of Rust tools to include";
@@ -58,7 +62,7 @@ in
           ] ++ config.rust-dev.withTools)) ++ config.rust-dev.extraPackages;
 
           env-hooks.rust = ''
-            rustup default stable
+            rustup default ${config.rust-dev.rustVersion}
           '';
         };
       });
