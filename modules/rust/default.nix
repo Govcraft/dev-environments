@@ -15,7 +15,7 @@ in
             enable = lib.mkEnableOption "Rust development environment";
             withTools = lib.mkOption {
               type = lib.types.listOf lib.types.str;
-              default = [ "clippy" "rustfmt" ];
+              default = [  ];
               description = "List of Rust tools to include";
             };
             extraPackages = lib.mkOption {
