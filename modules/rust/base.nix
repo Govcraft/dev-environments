@@ -3,8 +3,7 @@
 let
   cfg = config.dev.rust;
 in {
-  options = {
-    dev.rust = {
+  options.dev.rust = {
       enable = lib.mkEnableOption "Rust development environment";
       
       withTools = lib.mkOption {
@@ -28,7 +27,6 @@ in {
         };
         description = "Shell aliases to include";
       };
-    };
   };
 
   config = lib.mkIf cfg.enable {

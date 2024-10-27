@@ -7,8 +7,4 @@
 #    ./ide.nix
   ];
   
-# flake = {
-#   dev.rust;
-#   # Export any flake-level configurations here if needed
-# };
 }
