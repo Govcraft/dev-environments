@@ -4,7 +4,9 @@
 {
   imports = [
     ./base.nix
-#    ./ide.nix
   ];
   
+  flake = {
+    # Export any flake-level configurations here if needed
+  };
 }

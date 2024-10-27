@@ -3,10 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-parts = {
-      url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs-lib.follows = "nixpkgs";
-    };
+    flake-parts.url = "github:hercules-ci/flake-parts";
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -14,18 +11,20 @@
   };
 
   outputs = inputs@{ flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } ({ flake-parts-lib, withSystem, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } ({ withSystem, flake-parts-lib, ... }:
     let
       inherit (flake-parts-lib) importApply;
-      flakeModules.rust = importApply ./modules/rust/default.nix { inherit withSystem; };
+      flakeModules.default = importApply ./modules/rust/default.nix { inherit withSystem; };
     in
     {
       imports = [
-        flakeModules.rust
+        flakeModules.default
+        # inputs.foo.flakeModules.default
       ];
-
-      systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-
+      systems = [ "x86_64-linux" "aarch64-darwin" ];
+      perSystem = { pkgs, ... }: {
+        packages.default = pkgs.hello;
+      };
       flake = {
         inherit flakeModules;
       };
