@@ -17,5 +17,9 @@
       ];
 
       systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-    };
+      flake = {
+        # Explicitly expose modules
+        modules.rust = ./modules/rust;
+      };
+  };
 }
