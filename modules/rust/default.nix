@@ -8,7 +8,7 @@
   ];
   
   flake = {
-    dev.rust
+    dev.rust;
     # Export any flake-level configurations here if needed
   };
 }
