@@ -12,9 +12,13 @@
 
   outputs = inputs@{ nixpkgs, flake-parts, ... }:
     {
+      # Each module exposed individually
+      flakeModules = {
+        rust = ./modules/rust;
+        node = ./modules/node;
+      };
+      
+      # Keep the old flakeModule for backwards compatibility
       flakeModule = ./modules/rust;
     };
-
 }
-
-
