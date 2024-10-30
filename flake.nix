@@ -20,6 +20,9 @@
         node = {
           imports = [ ./modules/common.nix ./modules/node ];
         };
+        typst = {
+          imports = [ ./modules/common.nix ./modules/typst ];
+        };
       };
       
       flakeModule = ./modules/rust;
