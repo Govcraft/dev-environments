@@ -10,21 +10,37 @@
     };
   };
 
-  outputs = inputs@{ nixpkgs, flake-parts, ... }:
+  outputs =
+    inputs@{ nixpkgs, flake-parts, ... }:
     {
       flakeModules = {
         common = ./modules/common.nix;
         rust = {
-          imports = [ ./modules/common.nix ./modules/rust ];
+          imports = [
+            ./modules/common.nix
+            ./modules/rust
+          ];
+        };
+        golang = {
+          imports = [
+            ./modules/common.nix
+            ./modules/golang
+          ];
         };
         node = {
-          imports = [ ./modules/common.nix ./modules/node ];
+          imports = [
+            ./modules/common.nix
+            ./modules/node
+          ];
         };
         typst = {
-          imports = [ ./modules/common.nix ./modules/typst ];
+          imports = [
+            ./modules/common.nix
+            ./modules/typst
+          ];
         };
       };
-      
+
       flakeModule = ./modules/rust;
     };
 }
