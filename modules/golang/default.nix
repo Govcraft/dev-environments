@@ -64,20 +64,20 @@ in
         type = mainSubmodule;
         description = lib.mdDoc ''
 
-                      Specification for the Golang development environment
+          Specification for the Golang development environment
         '';
         default = { };
       };
 
       config = lib.mkIf config.go-dev.enable {
         env-packages.go = [
-          (pkgs.golang."${config.go-dev.goVersion}")
+          (pkgs.go)
         ] ++ (map (tool: pkgs."${tool}") config.go-dev.withTools) ++ config.go-dev.extraPackages;
 
         env-hooks.go = ''
 
-                      export GOPATH=$PWD/go
-                      export PATH=$GOPATH/bin:$PATH
+          export GOPATH=$PWD/go
+          export PATH=$GOPATH/bin:$PATH
         '';
       };
     }
